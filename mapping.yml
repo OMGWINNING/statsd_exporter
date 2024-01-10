@@ -1,0 +1,29 @@
+mappings:
+  - match: "statsd\\.(.*)\\.(.*)\\.(.*):(.*)|ms|#network:(.*)|c:(.*)"
+    match_type: regex
+    observer_type: summary
+    name: 'statsd_summary'
+    labels:
+      service: $1
+      method: $2
+      env: $3
+      network: $5
+    summary_options:
+      quantiles:
+        - quantile: 0.99999
+          error: 0.000001
+        - quantile: 0.9999
+          error: 0.00001
+        - quantile: 0.999
+          error: 0.0001
+        - quantile: 0.99
+          error: 0.001
+        - quantile: 0.95
+          error: 0.01
+        - quantile: 0.9
+          error: 0.05
+        - quantile: 0.5
+          error: 0.005
+      max_age: 30s
+      age_buckets: 3
+      buf_cap: 1000
