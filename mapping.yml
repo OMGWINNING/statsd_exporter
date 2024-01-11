@@ -1,13 +1,11 @@
 mappings:
-  - match: "statsd\\.(.*)\\.(.*)\\.(.*):(.*)|ms|#network:(.*)|c:(.*)"
-    match_type: regex
+  - match: "statsd.*.*.*"
     observer_type: summary
     name: 'statsd_summary'
     labels:
       service: $1
       method: $2
       env: $3
-      network: $5
     summary_options:
       quantiles:
         - quantile: 0.99999
@@ -27,3 +25,15 @@ mappings:
       max_age: 30s
       age_buckets: 3
       buf_cap: 1000
+
+# - match: "statsd.*.*.*"
+#   observer_type: histogram
+#   histogram_options:
+#     buckets: [ 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.010 ]
+#     native_histogram_bucket_factor: 1.1
+#     native_histogram_max_buckets: 256
+#   name: "statsd_timer"
+#   labels:
+#     service: "$1",
+#     method: "$2",
+#     env: "$3"
