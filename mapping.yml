@@ -1,0 +1,39 @@
+mappings:
+  - match: "statsd.*.*.*"
+    observer_type: summary
+    name: 'statsd_summary'
+    labels:
+      service: $1
+      method: $2
+      env: $3
+    summary_options:
+      quantiles:
+        - quantile: 0.99999
+          error: 0.000001
+        - quantile: 0.9999
+          error: 0.00001
+        - quantile: 0.999
+          error: 0.0001
+        - quantile: 0.99
+          error: 0.001
+        - quantile: 0.95
+          error: 0.01
+        - quantile: 0.9
+          error: 0.05
+        - quantile: 0.5
+          error: 0.005
+      max_age: 30s
+      age_buckets: 3
+      buf_cap: 1000
+
+# - match: "statsd.*.*.*"
+#   observer_type: histogram
+#   histogram_options:
+#     buckets: [ 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.010 ]
+#     native_histogram_bucket_factor: 1.1
+#     native_histogram_max_buckets: 256
+#   name: "statsd_timer"
+#   labels:
+#     service: "$1",
+#     method: "$2",
+#     env: "$3"
